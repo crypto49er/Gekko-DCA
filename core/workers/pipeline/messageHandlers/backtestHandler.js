@@ -2,11 +2,14 @@
 // all candles and tades, when done report them
 // all back at once
 
+var _ = require('lodash');
+
 module.exports = done => {
   var trades = [];
   var roundtrips = []
   var candles = [];
   var report = false;
+  var indicatorResults = {};
 
   return {
     message: message => {
@@ -25,16 +28,28 @@ module.exports = done => {
 
       else if(message.log)
         console.log(message.log);
+
+      else if(message.type === 'indicatorResult') {
+        if(!_.has(indicatorResults, message.indicatorResult.name))
+          indicatorResults[message.indicatorResult.name] = [];
+
+        indicatorResults[message.indicatorResult.name].push({
+          result: message.indicatorResult.result,
+          date: message.indicatorResult.date
+        });
+      }
     },
     exit: status => {
+
       if(status !== 0)
         done('Child process has died.');
       else
         done(null, {
-          trades: trades,
-          candles: candles,
-          report: report,
-          roundtrips: roundtrips
+          trades,
+          candles,
+          report,
+          roundtrips,
+          indicatorResults
         });
     }
   }

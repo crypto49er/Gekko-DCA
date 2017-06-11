@@ -35,10 +35,11 @@ module.exports = function *() {
   if(!req.data.roundtrips)
     delete result.roundtrips;
 
+  if(!req.data.indicatorResults)
+    delete result.indicatorResults;
+
   if(!req.data.trades)
     delete result.trades;
-
-  // todo: indicatorResults
 
   result.candles = _.map(
     result.candles,
