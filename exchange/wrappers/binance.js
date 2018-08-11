@@ -117,6 +117,12 @@ Trader.prototype.handleResponse = function(funcName, callback) {
         return callback(false, {filled: true});
       }
 
+      if(funcName === 'addOrder' && error.message.includes('Account has insufficient balance')) {
+        // https://github.com/askmike/gekko/issues/2405
+        console.log('Binance said: "Account has insufficient balance", retrying up to 3 times..');
+        error.retry = 3;
+      }
+
       return callback(error);
     }
 
