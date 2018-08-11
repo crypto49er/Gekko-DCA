@@ -64,6 +64,8 @@ const Trader = function(config) {
     this.fee = 0.1;
     // Set the proper fee asap.
     this.getFee(_.noop);
+
+    this.oldOrder = false;
   }
 };
 
@@ -119,8 +121,15 @@ Trader.prototype.handleResponse = function(funcName, callback) {
 
       if(funcName === 'addOrder' && error.message.includes('Account has insufficient balance')) {
         // https://github.com/askmike/gekko/issues/2405
-        console.log('Binance said: "Account has insufficient balance", retrying up to 3 times..');
-        error.retry = 3;
+        console.log('Binance said: "Account has insufficient balance", retrying once..');
+        error.retry = 1;
+
+        // temp debug
+        if(this.oldOrder) {
+          this.getOrder(oldOrder, (err, res) => {
+            console.log('partial fill on old order?', {err, res});
+          });
+        }
       }
 
       return callback(error);
@@ -466,6 +475,9 @@ Trader.prototype.checkOrder = function(order, callback) {
 Trader.prototype.cancelOrder = function(order, callback) {
 
   const cancel = (err, data) => {
+
+    this.oldOrder = order;
+
     if(err) {
       return callback(err);
     }
