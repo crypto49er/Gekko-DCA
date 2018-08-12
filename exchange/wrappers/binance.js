@@ -126,7 +126,7 @@ Trader.prototype.handleResponse = function(funcName, callback) {
 
         // temp debug
         if(this.oldOrder) {
-          this.getOrder(oldOrder, (err, res) => {
+          this.getOrder(this.oldOrder, (err, res) => {
             console.log('partial fill on old order?', {err, res});
           });
         }
