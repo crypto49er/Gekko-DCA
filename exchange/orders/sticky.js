@@ -144,10 +144,10 @@ class StickyOrder extends BaseOrder {
 
     console.log(new Date, '[GB/insufficientFunds] on limitedCancelConfirmation market:');
 
+    const id = this.id;
+
     setTimeout(
       () => {
-        const id = this.id;
-
         this.api.getOrder(id, (innerError, res) => {
           if(this.handleError(innerError)) {
             return;
@@ -155,19 +155,21 @@ class StickyOrder extends BaseOrder {
 
           const amount = res.amount;
 
-          if(this.orders[id].filled !== amount) {
-            console.log(new Date, '[GB/insufficientFunds] found a partial fill of', amount - this.orders[id].filled);
-            this.orders[id].filled = amount;
-            this.emit('fill', this.calculateFilled());
-            if(this.calculateFilled() >= this.amount) {
-              return this.filled(this.price);
-            }
-          } else {
+          if(this.orders[id].filled === amount) {
             console.log(new Date, '[GB/insufficientFunds] found no partial fill');
             // handle original error
-            this.handleError(err);
+            return this.handleError(err);
           }
-        })
+
+          console.log(new Date, '[GB/insufficientFunds] found a partial fill of', amount - this.orders[id].filled);
+          this.orders[id].filled = amount;
+          this.emit('fill', this.calculateFilled());
+          if(this.calculateFilled() >= this.amount) {
+            return this.filled(this.price);
+          }
+
+          setTimeout(this.createOrder, this.checkInterval);
+        });
       },
       this.checkInterval
     );
