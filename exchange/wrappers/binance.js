@@ -307,7 +307,6 @@ Trader.prototype.isValidPrice = function(price) {
 }
 
 Trader.prototype.isValidLot = function(price, amount) {
-  console.log('isValidLot', this.market.minimalOrder.order, amount * price >= this.market.minimalOrder.order)
   return amount * price >= this.market.minimalOrder.order;
 }
 

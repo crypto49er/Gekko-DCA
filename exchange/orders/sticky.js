@@ -24,7 +24,7 @@ class StickyOrder extends BaseOrder {
   constructor({api, marketConfig, capabilities}) {
     super(api);
 
-    this.marketConfig = marketConfig;
+    this.market = marketConfig;
     this.capabilities = capabilities;
 
     // global async lock
@@ -450,7 +450,7 @@ class StickyOrder extends BaseOrder {
 
     this.amount = this.roundAmount(amount - this.calculateFilled());
 
-    if(this.amount < this.data.market.minimalOrder.amount) {
+    if(this.amount < this.market.minimalOrder.amount) {
       if(this.calculateFilled()) {
         // we already filled enough of the order!
         this.filled();
