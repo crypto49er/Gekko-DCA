@@ -21,8 +21,11 @@ const BaseOrder = require('./order');
 const states = require('./states');
 
 class StickyOrder extends BaseOrder {
-  constructor(api) {
+  constructor({api, marketConfig, capabilities}) {
     super(api);
+
+    this.marketConfig = marketConfig;
+    this.capabilities = capabilities;
 
     // global async lock
     this.sticking = false;
@@ -126,7 +129,58 @@ class StickyOrder extends BaseOrder {
     });
   }
 
+  // check if the last order was partially filled
+  // on an exchange that does not pass fill data on cancel
+  // see https://github.com/askmike/gekko/pull/2450
+  handleInsufficientFundsError(err) {
+    if(
+      !err ||
+      err.type !== 'insufficientFunds' ||
+      !this.capabilities.limitedCancelConfirmation ||
+      !this.id
+    ) {
+      return false;
+    }
+
+    console.log(new Date, '[GB/insufficientFunds] on limitedCancelConfirmation market:');
+
+    setTimeout(
+      () => {
+        const id = this.id;
+
+        this.api.getOrder(id, (innerError, res) => {
+          if(this.handleError(innerError)) {
+            return;
+          }
+
+          const amount = res.amount;
+
+          if(this.orders[id].filled !== amount) {
+            console.log(new Date, '[GB/insufficientFunds] found a partial fill of', amount - this.orders[id].filled);
+            this.orders[id].filled = amount;
+            this.emit('fill', this.calculateFilled());
+            if(this.calculateFilled() >= this.amount) {
+              return this.filled(this.price);
+            }
+          } else {
+            console.log(new Date, '[GB/insufficientFunds] found no partial fill');
+            // handle original error
+            this.handleError(err);
+          }
+        })
+      },
+      this.checkInterval
+    );
+
+    return true;
+  }
+
   handleCreate(err, id) {
+
+    if(this.handleInsufficientFundsError(err)) {
+      return;
+    }
+
     if(this.handleError(err)) {
       return;
     }

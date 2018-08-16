@@ -120,16 +120,7 @@ Trader.prototype.handleResponse = function(funcName, callback) {
       }
 
       if(funcName === 'addOrder' && error.message.includes('Account has insufficient balance')) {
-        // https://github.com/askmike/gekko/issues/2405
-        console.log('Binance said: "Account has insufficient balance", retrying once..');
-        error.retry = 1;
-
-        // temp debug
-        if(this.oldOrder) {
-          this.getOrder(this.oldOrder, (err, res) => {
-            console.log('partial fill on old order?', {err, res});
-          });
-        }
+        error.type = 'insufficientFunds';
       }
 
       return callback(error);
@@ -479,6 +470,8 @@ Trader.prototype.cancelOrder = function(order, callback) {
     this.oldOrder = order;
 
     if(err) {
+      if(err.message.contains(''))
+
       return callback(err);
     }
 
@@ -510,7 +503,8 @@ Trader.getCapabilities = function() {
     providesFullHistory: true,
     tid: 'tid',
     tradable: true,
-    gekkoBroker: 0.6
+    gekkoBroker: 0.6,
+    limitedCancelConfirmation: true
   };
 };
 
