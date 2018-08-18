@@ -142,8 +142,6 @@ class StickyOrder extends BaseOrder {
       return false;
     }
 
-    console.log(new Date, '[GB/insufficientFunds] on limitedCancelConfirmation market:');
-
     const id = this.id;
 
     setTimeout(
@@ -156,12 +154,10 @@ class StickyOrder extends BaseOrder {
           const amount = res.amount;
 
           if(this.orders[id].filled === amount) {
-            console.log(new Date, '[GB/insufficientFunds] found no partial fill');
             // handle original error
             return this.handleError(err);
           }
 
-          console.log(new Date, '[GB/insufficientFunds] found a partial fill of', amount - this.orders[id].filled);
           this.orders[id].filled = amount;
           this.emit('fill', this.calculateFilled());
           if(this.calculateFilled() >= this.amount) {
