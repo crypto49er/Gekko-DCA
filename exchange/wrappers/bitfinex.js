@@ -168,6 +168,8 @@ Trader.prototype.submitOrder = function(type, amount, price, callback) {
     if (err)
       return callback(err);
 
+    console.log('bfx submitted order:', data);
+
     callback(null, data.order_id);
   }
 
@@ -206,6 +208,8 @@ Trader.prototype.checkOrder = function(order_id, callback) {
 
       return callback(err);
     }
+
+    console.log('checkOrder resp:', data);
 
     return callback(undefined, {
       open: data.is_live,
@@ -263,8 +267,12 @@ Trader.prototype.cancelOrder = function(order_id, callback) {
       return callback(err);
     }
 
+    console.log('bfx cancel resp:', data);
+
     return callback(undefined, false);
   }
+
+  console.log('bfx cancel');
 
   const handler = cb => this.bitfinex.cancel_order(order_id, this.handleResponse('cancelOrder', cb));
   retry(null, handler, processResponse);
