@@ -209,7 +209,7 @@ Trader.prototype.checkOrder = function(order_id, callback) {
       return callback(err);
     }
 
-    console.log('checkOrder resp:', data);
+    console.log(new Date, 'checkOrder resp:', data);
 
     return callback(undefined, {
       open: data.is_live,
@@ -217,6 +217,8 @@ Trader.prototype.checkOrder = function(order_id, callback) {
       filledAmount: +data.executed_amount
     });
   }
+
+  console.log(new Date, 'checkOrder');
 
   const fetcher = cb => this.bitfinex.order_status(order_id, this.handleResponse('checkOrder', cb));
   retry(null, fetcher, processResponse);
@@ -263,7 +265,7 @@ Trader.prototype.getOrder = function(order_id, callback) {
 
 Trader.prototype.cancelOrder = function(order_id, callback) {
   const processResponse = (err, data) => {
-    console.log('bfx cancel resp:', { err, data });
+    console.log(new Date, 'bfx cancel resp:', { err, data });
 
     if (err) {
       return callback(err);
@@ -272,7 +274,7 @@ Trader.prototype.cancelOrder = function(order_id, callback) {
     return callback(undefined, false);
   }
 
-  console.log('bfx cancel');
+  console.log(new Date, 'bfx cancel');
 
   const handler = cb => this.bitfinex.cancel_order(order_id, this.handleResponse('cancelOrder', cb));
   retry(null, handler, processResponse);
