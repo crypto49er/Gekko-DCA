@@ -263,11 +263,11 @@ Trader.prototype.getOrder = function(order_id, callback) {
 
 Trader.prototype.cancelOrder = function(order_id, callback) {
   const processResponse = (err, data) => {
+    console.log('bfx cancel resp:', { err, data });
+
     if (err) {
       return callback(err);
     }
-
-    console.log('bfx cancel resp:', data);
 
     return callback(undefined, false);
   }
