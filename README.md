@@ -10,6 +10,8 @@ I modded the Gekko Trading Bot to Dollar Cost Average (NOTE: The bot no longer w
 3. Scroll to the config.trader section and input your exchange API key & secret. Scroll again to the end of the file and confirm you are responsible for your own strategies and that Gekko only automates it for you. 
 4. Start the bot by going to Gekko folder in Terminal or Command Prompt and type in node gekko.js --config config-live.js (or whatever you named the config file to).
 
+Note: I tested this on Coinbase Pro using ETC/USD trade pair and confirmed it works. Other trade pairs and other exchanges might require higher trade minimums. I suggest you find out this information first. 
+
 _________________________________________________________________________________
 
 ![Gordon Gekko](http://mikevanrossum.nl/static/gekko.jpg)
