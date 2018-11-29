@@ -3,14 +3,10 @@
 // This strategy is made for the Gekko Mod Gekko-DCA
 // https://github.com/crypto49er/gekko-DCA
 // This strategy will issue a buy signal based on the
-// specified time frame you determine (default: 1x a week)
+// specified time frame you determine in the config file.
 // It will use a defined amount of currency (USD, EUR, BTC)
 // to buy an asset (BTC, ETH, LTC).
 // It will never issue a sell signal.
-//
-// The default defined amount is 10. If you want to adjust the amount, 
-// you need to go to plugins/trader/trader.js to modify it. (Line 185)
-
 
 var log = require('../core/log');
 var config = require ('../core/util.js').getConfig();
