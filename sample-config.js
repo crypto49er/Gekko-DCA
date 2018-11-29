@@ -16,8 +16,8 @@ config.debug = true; // for additional logging / debugging
 config.watch = {
 
   // see https://gekko.wizb.it/docs/introduction/supported_exchanges.html
-  exchange: 'binance',
-  currency: 'USDT',
+  exchange: 'gdax',
+  currency: 'USD',
   asset: 'BTC',
 
   // You can set your own tickrate (refresh rate).
@@ -41,6 +41,8 @@ config.tradingAdvisor = {
 config.DCA = {
   // Set buy frequency: daily = 1, weekly = 7, monthly = 30 
   frequency: 7,
+  // Set dollar amount (default is USD, change currency in config.watch.currency)
+  amount: 10,
 }
 
 // MACD settings:
@@ -69,7 +71,7 @@ config.MACD = {
 
 // do you want Gekko to simulate the profit of the strategy's own advice?
 config.paperTrader = {
-  enabled: true,
+  enabled: false,
   // report the profit in the currency or the asset?
   reportInCurrency: true,
   // start balance, on what the current balance is compared with
@@ -95,7 +97,7 @@ config.performanceAnalyzer = {
 // Enabling this will activate trades for the market being
 // watched by `config.watch`.
 config.trader = {
-  enabled: false,
+  enabled: true,
   key: '',
   secret: '',
   username: '', // your username, only required for specific exchanges.
