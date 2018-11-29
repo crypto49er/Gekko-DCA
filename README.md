@@ -3,7 +3,7 @@
 If you want the original Gekko Trading Bot, go here:
 https://github.com/askmike/gekko
 
-I modded the Gekko Trading Bot to Dollar Cost Average. I have to be honest, I only made minor changes to the bot to get it to work this way. The bot works quite well already so all I had to do was modify 3 files and add the dollar cost average strategy. To get this bot to work, install the same way you would Gekko, and then do the following:
+I modded the Gekko Trading Bot to Dollar Cost Average (NOTE: The bot no longer works as a trading bot, if you want to have the DCA bot and Trading bot on the same machine, you need to have them installed on separate folders). To be honest, I only made minor changes to the bot to get it to work this way. The bot works quite well already so all I had to do was modify 3 files (check the commit to see which files were changed) and add the dollar cost average strategy. To get this bot to work, install the same way you would Gekko, and then do the following:
 
 1. Make a copy or rename the config file "sample-config.js" (Ex: config-live.js or config-BTC-live.js).
 2. In the config file, under config.DCA, adjust how often you want Gekko to Dollar Cost Average buy. 
