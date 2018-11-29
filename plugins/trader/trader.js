@@ -181,7 +181,7 @@ Trader.prototype.processAdvice = function(advice) {
       });
     }
 
-    // Adjust this to the amount you if you want Gekko to use each time to buy
+    // Adjust this to the amount you want Gekko to use each time it buys 
     let dcaAmount = 10;
     amount = (this.portfolio.currency > dcaAmount ? dcaAmount : this.portfolio.currency) / this.price;
 
