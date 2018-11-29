@@ -276,9 +276,10 @@ Base.prototype.advice = function(newDirection) {
     newDirection = newDirection.direction;
   }
 
-  if(newDirection === this._currentDirection) {
-    return;
-  }
+  // I commented this out so Gekko DCA will buy even if it bought previously 
+  // if(newDirection === this._currentDirection) {
+  //   return;
+  // }
 
   if(newDirection === 'short' && this._pendingTriggerAdvice) {
     this._pendingTriggerAdvice = null;
