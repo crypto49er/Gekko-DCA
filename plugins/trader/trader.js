@@ -3,9 +3,13 @@ const util = require('../../core/util.js');
 const config = util.getConfig();
 const dirs = util.dirs();
 const moment = require('moment');
+const fsw = require('fs');
 
 const log = require(dirs.core + 'log');
 const Broker = require(dirs.broker + '/gekkoBroker');
+
+var headerset = '';
+var avgPrice = 0.0;
 
 require(dirs.gekko + '/exchange/dependencyCheck');
 
@@ -181,18 +185,10 @@ Trader.prototype.processAdvice = function(advice) {
       });
     }
 
-<<<<<<< HEAD
-    // Adjust this to the amount you if you want Gekko to use each time to buy
-    let dcaAmount = 1;
-    amount = (this.portfolio.currency > dcaAmount ? dcaAmount : this.portfolio.currency) / this.price;
-||||||| merged common ancestors
-    amount = this.portfolio.currency / this.price * 0.95;
-=======
     // Use the amount specified in config file to determine how much currency to use per buy
     let dcaAmount = config.DCA.amount;
     // Use the entire balance if balance is less than dcaAmount (Ex: balance = $7, dcaAmount = $10)
     amount = (this.portfolio.currency > dcaAmount ? dcaAmount : this.portfolio.currency) / this.price;
->>>>>>> be0a7145d34b922f09e817f6e11ebdfcf50f1a6e
 
     log.info(
       'Trader',
@@ -325,6 +321,32 @@ Trader.prototype.createOrder = function(side, amount, advice, id) {
           log.warn('WARNING: exchange did not provide fee information, assuming no fees..');
           effectivePrice = summary.price;
         }
+
+        grreadtime = summary.date.format('l LT');
+
+        headertxt = "date,price,amount,Current DCA Price\n";
+
+        if (avgPrice == 0.0 && summary.price != 0) {
+          avgPrice = summary.price;
+        } else {
+          avgPrice = (avgPrice + summary.price) / 2;
+        }
+
+
+        outtxt = grreadtime + "," + summary.price + "," + summary.amount + "," + avgPrice + "\n";
+
+        if(headerset==""){
+
+          fsw.appendFileSync("DCA-Tracker.csv", headertxt, encoding='utf8'); 
+          headerset = "1";
+
+        }
+
+        // If summary.price is 0, do not report as the info inisde summary is useless
+        if (summary.price != 0 && summary.amount != 0)
+          fsw.appendFileSync("DCA-Tracker.csv", outtxt, encoding='utf8');
+
+        outtxt = "";
 
         this.deferredEmit('tradeCompleted', {
           id,
