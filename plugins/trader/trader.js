@@ -181,9 +181,18 @@ Trader.prototype.processAdvice = function(advice) {
       });
     }
 
+<<<<<<< HEAD
     // Adjust this to the amount you if you want Gekko to use each time to buy
     let dcaAmount = 1;
     amount = (this.portfolio.currency > dcaAmount ? dcaAmount : this.portfolio.currency) / this.price;
+||||||| merged common ancestors
+    amount = this.portfolio.currency / this.price * 0.95;
+=======
+    // Use the amount specified in config file to determine how much currency to use per buy
+    let dcaAmount = config.DCA.amount;
+    // Use the entire balance if balance is less than dcaAmount (Ex: balance = $7, dcaAmount = $10)
+    amount = (this.portfolio.currency > dcaAmount ? dcaAmount : this.portfolio.currency) / this.price;
+>>>>>>> be0a7145d34b922f09e817f6e11ebdfcf50f1a6e
 
     log.info(
       'Trader',
